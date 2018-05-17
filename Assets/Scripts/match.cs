@@ -75,6 +75,8 @@ public class match : MonoBehaviour
 
             MatchInfo hostInfo = matchInfo;
             NetworkManager.singleton.StartClient(hostInfo);
+            GameObject.Find("btnCreateMatch").SetActive(false);
+            GameObject.Find("btnFindMatch").SetActive(false);
         }
         else
         {
