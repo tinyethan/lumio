@@ -1,6 +1,6 @@
-WindowsStandalone
+Android
 PlayerPath?
-C:/Users/ethan/Source/Repos/testmove/testmove/Build/test.exe
+C:/Users/ethan/Source/Repos/testmove/testmove/testmove/Build/android/test.apk
 SceneListBegin?
 Assets/Scenes/level_1.unity
 SceneListEnd?
@@ -175,5 +175,5 @@ a8796ecdc9d5c260bbe32f30c4b10708 Assembly-CSharp-firstpass.dll:UnityStandardAsse
 4c4e5bbdfb8b8f4d80c5ad7176b30d43 Assembly-CSharp.dll:.Done_RandomRotator
 dd5481137759597d614818793c90a7fe Assembly-CSharp.dll:.dust
 e6620c373ab7ec2b45024da89745a65e Assembly-CSharp.dll:.Done_BGScroller
-2fb9bbea355ee2dd7625d1d1e2fc1594 Assembly-CSharp.dll:.move
+5da86da5fa7ec9e40f7f3bf18478e42c Assembly-CSharp.dll:.move
 a0dcef889bcbbdb0a398c4e8e4b8e14b Assembly-CSharp.dll:.Done_GameController

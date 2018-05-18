@@ -34,8 +34,10 @@ public class joystick : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoint
             float x = (bgImg.rectTransform.pivot.x == 1) ? pos.x * 2 + 1 : pos.x * 2 - 1;
             float y = (bgImg.rectTransform.pivot.y == 1) ? pos.y * 2 + 1 : pos.y * 2 - 1;
 
-            InputDirection = new Vector3(x, 0, y);
+            InputDirection = new Vector3(x, y, 0);
             InputDirection = (InputDirection.magnitude > 1) ? InputDirection.normalized : InputDirection;
+
+            Debug.Log(InputDirection);
 
             joystickImg.rectTransform.anchoredPosition = new Vector3(InputDirection.x * (bgImg.rectTransform.sizeDelta.x / 6), InputDirection.z * (bgImg.rectTransform.sizeDelta.y / 6));
         }

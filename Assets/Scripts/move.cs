@@ -9,18 +9,25 @@ public class move : NetworkBehaviour {
     public float moveSpeed = 1f;
     public float smoothTimeY;
     public float smoothTimeX;
-
-    public joystick moveJoystick;
+    float yMin = -8f;
+    float yMax = 8f;
+    float xMin = -8f;
+    float xMax = 8f;
+    //public joystick moveJoystick;
+    private GameObject joystickcont;
+    
 
     //float velocity = Mathf.Clamp(1, 1, 1);
 
-    
+
 
     //public Camera cam;
     //public GameObject ship;
 
     // Use this for initialization
     void Start () {
+        joystickcont = GameObject.FindWithTag("JoystickContainer");
+
         gameObject.transform.localScale = new Vector3(0.05f, 0.05f, 1);
 
         if (!isLocalPlayer)
@@ -40,16 +47,14 @@ public class move : NetworkBehaviour {
         Camera.main.orthographicSize = gameObject.transform.localScale.y * 2 + (distance / 10f);
     }
 
-    // Update is called once per frame
-    float yMin = -8f;
-    float yMax = 8f;
-    float xMin = -8f;
-    float xMax = 8f;
+    
     void Update () {
         Vector3 dir = Vector3.zero;
 
         dir.x = Input.GetAxis("Horizontal");
         dir.y = Input.GetAxis("Vertical");
+        
+        joystick moveJoystick = joystickcont.GetComponent<joystick>();
 
         if (moveJoystick.InputDirection != Vector3.zero)
         {
@@ -70,8 +75,6 @@ public class move : NetworkBehaviour {
         {
             return;
         }
-
-        
 
         //pc input
         //var mouse = Input.mousePosition;
