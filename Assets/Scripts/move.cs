@@ -62,12 +62,20 @@ public class move : NetworkBehaviour {
             dir.y = moveJoystick.InputDirection.y;
         }
 
-        float heading = Mathf.Atan2(dir.x, dir.y);
-        transform.rotation = Quaternion.Inverse(Quaternion.Euler(0f, 0f, heading * Mathf.Rad2Deg));
+     
 
         var rb = gameObject.GetComponent<Rigidbody2D>();
-        
-        rb.velocity = new Vector3(dir.x*.2f, dir.y*.2f, 0);
+
+        if (dir == Vector3.zero)
+        {
+
+        }
+        else
+        {
+            float heading = Mathf.Atan2(dir.x, dir.y);
+            transform.rotation = Quaternion.Inverse(Quaternion.Euler(0f, 0f, heading * Mathf.Rad2Deg));
+            rb.velocity = new Vector3(dir.x * .2f, dir.y * .2f, 0);
+        }
 
         Camera.main.transform.position = new Vector3(transform.position.x, transform.position.y, Camera.main.transform.position.z);
 
