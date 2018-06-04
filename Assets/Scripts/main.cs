@@ -81,34 +81,7 @@ public class main : NetworkBehaviour {
         }
 
     }
-
-    //public override void OnStartServer()
-    //{
-    //    Debug.Log("asdf");
-    //    for (int i = 0; i < 1000; i++)
-    //    {
-    //        //var spawnPosition = new Vector3(
-    //        //    Random.Range(-8.0f, 8.0f),
-    //        //    0.0f,
-    //        //    Random.Range(-8.0f, 8.0f));
-
-    //        //var spawnRotation = Quaternion.Euler(
-    //        //    0.0f,
-    //        //    Random.Range(0, 180),
-    //        //    0.0f);
-
-    //        //var enemy = (GameObject)Instantiate(dustparticle, spawnPosition, spawnRotation);
-    //        //NetworkServer.Spawn(enemy);
-
-    //        Vector3 screenPosition = new Vector3(Random.Range(-25, 25), Random.Range(-15, 15), 0);
-    //        var enemy = Instantiate(dustparticle, screenPosition, Quaternion.identity);
-
-    //        enemy.gameObject.tag = "particle";
-    //        NetworkServer.Spawn(enemy);
-    //    }
-    //}
-
-    // Update is called once per frame
+    
     void Update () {
         int particles = GameObject.FindGameObjectsWithTag("particle").Length;
 
@@ -119,9 +92,9 @@ public class main : NetworkBehaviour {
 
             Vector3 screenPosition = new Vector3(x, y, 0);
             var enemy = Instantiate(dustparticle, screenPosition, Quaternion.identity);
-            float sizex = enemy.transform.localScale.x * (GameObject.Find("ship").transform.localScale.x*1);
-            float sizey = enemy.transform.localScale.y * (GameObject.Find("ship").transform.localScale.y*1);
-            enemy.transform.localScale = new Vector3(sizex, sizey, 1);
+            //float sizex = enemy.transform.localScale.x * (GameObject.Find("ship").transform.localScale.x*1);
+            //float sizey = enemy.transform.localScale.y * (GameObject.Find("ship").transform.localScale.y*1);
+            //enemy.transform.localScale = new Vector3(sizex, sizey, 1);
             enemy.gameObject.tag = "particle";
         }
     }

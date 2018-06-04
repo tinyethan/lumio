@@ -6,34 +6,48 @@ using UnityEngine.Networking;
 public class fire : NetworkBehaviour{
 
     public GameObject shockwave;
-    private GameObject ship;
-    private int a = 0;
-    private GameObject eb;
-    private GameObject go;
-
-    float roty;
-    float rotx;
-    //v = go.transform.position;
-    //    go.transform.position = v;
-    //    go.transform.rotation = Quaternion.identity;
-
- 
-    private int energy = 4;
-    private float targetTime = 10.0f;
-
+    public GameObject ship;
+    //private int a = 0;
     
+    //private GameObject go;
+
+    //float roty;
+    //float rotx;
+ 
+    
+
+    public override void OnStartLocalPlayer()
+    {
+        base.OnStartLocalPlayer();
+        gameObject.name = "Local";
+    }
+
+    [Command]
+    public void Cmdspawn(GameObject go)
+    {
+        NetworkServer.Spawn(go);
+    }
+
     public void createshockwave()
     {
-        ship = GameObject.FindGameObjectWithTag("ship");
-        eb = GameObject.Find("energybar");
-        go = Instantiate(shockwave, ship.transform.position, ship.transform.rotation);
-        go.transform.parent = ship.transform;
+        int energy = 4;
+        float targetTime = 10.0f;
+        GameObject eb = new GameObject();
+        ship = GameObject.Find("Local");
 
-        if (!isLocalPlayer)
-        {
-            return;
-        }
-        if (Input.GetMouseButtonDown(0))
+        Debug.Log(ship);
+        //if (!ship.GetComponent<NetworkIdentity>().isLocalPlayer)
+        //{
+        //    return;
+        //}
+        
+        GameObject go = Instantiate(shockwave, ship.transform.position, ship.transform.rotation);
+        go.transform.parent = ship.transform;
+        Cmdspawn(go);
+
+        eb = GameObject.Find("energybar");
+        
+       if (Input.GetMouseButtonDown(0))
         {
             if (energy > 0)
             {
@@ -106,61 +120,12 @@ public class fire : NetworkBehaviour{
         
     }
 
-    //private float _currentScale = InitScale;
-    //private const float TargetScale = 1.1f;
-    //private const float InitScale = 1f;
-    //private const int FramesCount = 100;
-    //private const float AnimationTimeSeconds = 2;
-    //private float _deltaTime = AnimationTimeSeconds / FramesCount;
-    //private float _dx = (TargetScale - InitScale) / FramesCount;
-    //private bool _upScale = true;
-    //private IEnumerator Breath(GameObject g)
+    //private void Update()
     //{
-    //    while (true)
+    //    if (go != null)
     //    {
-    //        while (_upScale)
-    //        {
-    //            _currentScale += _dx;
-    //            if (_currentScale > TargetScale)
-    //            {
-    //                _upScale = false;
-    //                _currentScale = TargetScale;
-    //            }
-    //            g.transform.localScale = Vector3.one * _currentScale;
-    //            yield return new WaitForSeconds(_deltaTime);
-    //        }
-
-    //        while (!_upScale)
-    //        {
-    //            _currentScale -= _dx;
-    //            if (_currentScale < InitScale)
-    //            {
-    //                _upScale = true;
-    //                _currentScale = InitScale;
-    //            }
-    //            g.transform.localScale = Vector3.one * _currentScale;
-    //            yield return new WaitForSeconds(_deltaTime);
-    //        }
+    //        Debug.Log("update should be ship: " + go.transform.parent.tag);
+    //        go.transform.position = ship.transform.position;
     //    }
-    //}
-
-    //IEnumerator Shock()
-    //{
-    //    Vector3 originalScale = shockwave.transform.localScale;
-    //    Debug.Log(originalScale);
-    //    Vector3 destinationScale = new Vector3(2.0f, 2.0f, 2.0f);
-
-    //    float currentTime = 0.0f;
-
-    //    do
-    //    {
-    //        shockwave.transform.localScale = Vector3.Lerp(originalScale, destinationScale, currentTime);
-    //        currentTime += Time.deltaTime;
-    //        Debug.Log(currentTime);
-    //        Debug.Log("a" + originalScale);
-    //        yield return null;
-    //    } while (currentTime <= 10);
-
-
     //}
 }

@@ -15,7 +15,7 @@ public class move : NetworkBehaviour {
     float xMax = 8f;
     //public joystick moveJoystick;
     private GameObject joystickcont;
-    
+
 
     //float velocity = Mathf.Clamp(1, 1, 1);
 
@@ -25,16 +25,31 @@ public class move : NetworkBehaviour {
     //public GameObject ship;
 
     // Use this for initialization
+    [SyncVar(hook = "OnSetScale")] private Vector3 scale;
+
+    [Command]
+    public void CmdSetScale(Vector3 vec)
+    {
+        this.scale = vec; // This is just to trigger the call to the OnSetScale while encapsulating.
+    }
+
+    [Command]
+    private void OnSetScale(Vector3 vec)
+    {
+        this.scale = vec;
+        this.transform.localScale = vec;
+    }
+
     void Start () {
-        joystickcont = GameObject.FindWithTag("JoystickContainer");
-
-        gameObject.transform.localScale = new Vector3(0.05f, 0.05f, 1);
-
+        
         if (!isLocalPlayer)
         {
             return;
         }
-
+        CmdSetScale(gameObject.transform.localScale);
+        joystickcont = GameObject.FindWithTag("JoystickContainer");
+        gameObject.transform.localScale = new Vector3(0.05f, 0.05f, 1);
+        
         Camera.main.transform.position = new Vector3(transform.position.x, transform.position.y, Camera.main.transform.position.z);
 
         var mouse = Input.mousePosition;
@@ -46,9 +61,15 @@ public class move : NetworkBehaviour {
         var distance = Vector3.Distance(gameObject.transform.position, mouse);
         Camera.main.orthographicSize = gameObject.transform.localScale.y * 2 + (distance / 10f);
     }
-
     
     void Update () {
+        
+        if (!isLocalPlayer)
+        {
+            return;
+        }
+
+        CmdSetScale(gameObject.transform.localScale);
         Vector3 dir = Vector3.zero;
 
         dir.x = Input.GetAxis("Horizontal");
@@ -61,9 +82,7 @@ public class move : NetworkBehaviour {
             dir.x = moveJoystick.InputDirection.x;
             dir.y = moveJoystick.InputDirection.y;
         }
-
-     
-
+        
         var rb = gameObject.GetComponent<Rigidbody2D>();
 
         if (dir == Vector3.zero)
@@ -78,12 +97,7 @@ public class move : NetworkBehaviour {
         }
 
         Camera.main.transform.position = new Vector3(transform.position.x, transform.position.y, Camera.main.transform.position.z);
-
-        if (!isLocalPlayer)
-        {
-            return;
-        }
-
+        
         //pc input
         //var mouse = Input.mousePosition;
         //var screenPoint = Camera.main.WorldToScreenPoint(gameObject.transform.localPosition);
