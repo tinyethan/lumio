@@ -28,7 +28,7 @@ public class match : MonoBehaviour
 
             NetworkManager.singleton.StartHost(hostInfo);
 
-            GameObject.Find("btnCreateMatch").SetActive(false);
+            //GameObject.Find("btnCreateMatch").SetActive(false);
             GameObject.Find("btnFindMatch").SetActive(false);
         }
         else
@@ -57,7 +57,7 @@ public class match : MonoBehaviour
             }
             else
             {
-                Debug.Log("No matches in requested room!");
+                CreateInternetMatch("new match");
             }
         }
         else
@@ -75,7 +75,7 @@ public class match : MonoBehaviour
 
             MatchInfo hostInfo = matchInfo;
             NetworkManager.singleton.StartClient(hostInfo);
-            GameObject.Find("btnCreateMatch").SetActive(false);
+            //GameObject.Find("btnCreateMatch").SetActive(false);
             GameObject.Find("btnFindMatch").SetActive(false);
         }
         else

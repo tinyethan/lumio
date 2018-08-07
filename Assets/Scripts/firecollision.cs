@@ -8,6 +8,9 @@ public class firecollision : NetworkBehaviour
 
     void Start()
     {
+        if (!isLocalPlayer) { return; }
+        var a = transform.parent;
+        var b = transform.parent.name;
         Physics2D.IgnoreCollision(transform.parent.GetComponent<Collider2D>(), GetComponent<Collider2D>());
     }
 

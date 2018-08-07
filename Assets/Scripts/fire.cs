@@ -1,49 +1,139 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.UI;
 
 public class fire : NetworkBehaviour{
 
     public GameObject shockwave;
-    public GameObject ship;
+    private GameObject ship;
     //private int a = 0;
-    
-    //private GameObject go;
+    //public GameObject go;
 
-    //float roty;
-    //float rotx;
- 
-    
 
-    public override void OnStartLocalPlayer()
+
+
+    [SyncVar(hook = "OnSetScale")] private Vector3 scale;
+
+    [Command]
+    public void CmdSetScale(Vector3 vec)
     {
-        base.OnStartLocalPlayer();
-        gameObject.name = "Local";
+        this.scale = vec; // This is just to trigger the call to the OnSetScale while encapsulating.
+    }
+
+    private void OnSetScale(Vector3 vec)
+    {
+        this.scale = vec;
+        this.transform.localScale = vec;
+    }
+
+
+
+
+    [SyncVar(hook = "OnPlayerName")]
+    public string playername;
+
+    ////float roty;
+    ////float rotx;
+
+    //[SyncVar] public string playerUniqueName;
+    //private NetworkInstanceId playerNetID;
+    //private Transform myTransfrom;
+
+    //public override void OnStartLocalPlayer()
+    //{
+    //    base.OnStartLocalPlayer();
+
+    //    playername = "Player";
+
+    //    //GetNetIdentity();
+    //    //SetIdentity();
+    //}
+
+    //private void Awake()
+    //{
+    //    myTransfrom = transform;
+    //}
+
+    //[Client]
+    //void GetNetIdentity()
+    //{
+    //    playerNetID = GetComponent<NetworkIdentity>().netId;
+    //    CmdTellServerMyIdentity(MakeUniqueIdentity());
+    //}
+
+    //void SetIdentity()
+    //{
+    //    if (!isLocalPlayer)
+    //    {
+    //        myTransfrom.name = playerUniqueName;
+    //    }
+    //    else
+    //    {
+
+    //        myTransfrom.name = MakeUniqueIdentity();
+    //    }
+    //}
+
+    //string MakeUniqueIdentity()
+    //{
+    //    string uniqueName = "Player" + playerNetID.ToString();
+    //    ship = GameObject.Find(uniqueName);
+    //    return uniqueName;
+    //}
+
+    //[Command]
+    //void CmdTellServerMyIdentity(string name)
+    //{
+    //    playerUniqueName = name;
+    //}
+    
+    void OnPlayerName(string playername)
+    {
+        Text playerlist = GameObject.Find("playerlist").GetComponent<Text>();
+        playerlist.text += playername + "\n";
+        ship = GameObject.Find(playername);
     }
 
     [Command]
-    public void Cmdspawn(GameObject go)
+    public void CmdPlayerName(string newtext)
     {
-        NetworkServer.Spawn(go);
+//        playername = "client";
+        Text playerlist = GameObject.Find("playerlist").GetComponent<Text>();
+        playerlist.text = "was client";
     }
 
-    public void createshockwave()
+    public override void OnStartClient()
     {
+        //if (isServer)
+        //{
+            playername = "Player" + GetComponent<NetworkIdentity>().netId.ToString();
+        //}
+        //else
+        //{
+        //    CmdPlayerName("was client");
+        //}
+
+    }
+
+    [Command]
+    public void Cmdcreateshockwave()
+    {
+
+        //var b = this.transform.parent.name;
+
+        GameObject g = GameObject.Find("btnFire");
+        g.transform.Translate(0, g.transform.position.y+5, 0);
+
         int energy = 4;
         float targetTime = 10.0f;
         GameObject eb = new GameObject();
-        ship = GameObject.Find("Local");
-
-        Debug.Log(ship);
-        //if (!ship.GetComponent<NetworkIdentity>().isLocalPlayer)
-        //{
-        //    return;
-        //}
         
-        GameObject go = Instantiate(shockwave, ship.transform.position, ship.transform.rotation);
-        go.transform.parent = ship.transform;
-        Cmdspawn(go);
+        GameObject go = Instantiate(shockwave, this.transform.position, this.transform.rotation);
+        
+        go.transform.parent = this.transform;
+
+        //Cmdspawn(go);
+        NetworkServer.Spawn(go);
 
         eb = GameObject.Find("energybar");
         
@@ -54,22 +144,22 @@ public class fire : NetworkBehaviour{
                 switch (energy)
                 {
                     case 4:
-                        createshockwave();
+                        Cmdcreateshockwave();
                         eb.transform.localScale = new Vector3(225, eb.transform.localScale.y, eb.transform.localScale.z);
                         energy--;
                         break;
                     case 3:
-                        createshockwave();
+                        Cmdcreateshockwave();
                         eb.transform.localScale = new Vector3(150, eb.transform.localScale.y, eb.transform.localScale.z);
                         energy--;
                         break;
                     case 2:
-                        createshockwave();
+                        Cmdcreateshockwave();
                         eb.transform.localScale = new Vector3(75, eb.transform.localScale.y, eb.transform.localScale.z);
                         energy--;
                         break;
                     case 1:
-                        createshockwave();
+                        Cmdcreateshockwave();
                         eb.transform.localScale = new Vector3(1, eb.transform.localScale.y, eb.transform.localScale.z);
                         energy--;
                         break;
@@ -119,13 +209,37 @@ public class fire : NetworkBehaviour{
         }
         
     }
+    
+    public void createshockwave()
+    {
+        if(!isLocalPlayer)
+        { return; }
+        
 
-    //private void Update()
-    //{
-    //    if (go != null)
-    //    {
-    //        Debug.Log("update should be ship: " + go.transform.parent.tag);
-    //        go.transform.position = ship.transform.position;
-    //    }
-    //}
+        Cmdcreateshockwave();
+    }
+
+    private void Start()
+    {
+        GetComponentInChildren<Canvas>().enabled = false;
+
+        if (gameObject.GetComponent<NetworkIdentity>().isLocalPlayer)
+        {
+            GetComponentInChildren<Canvas>().enabled = true;
+        }
+    }
+
+    private void Update()
+    {
+        
+        //if (myTransfrom.name == "" || myTransfrom.name == "Player(Clone)")
+        //{
+        //    SetIdentity();
+        //}
+        //if (go != null && ship != null)
+        //{
+        //    //Debug.Log("update should be ship: " + go.transform.parent.tag);
+        //    go.transform.position = ship.transform.position;
+        //}
+    }
 }

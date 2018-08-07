@@ -15,8 +15,7 @@ public class move : NetworkBehaviour {
     float xMax = 8f;
     //public joystick moveJoystick;
     private GameObject joystickcont;
-
-
+    
     //float velocity = Mathf.Clamp(1, 1, 1);
 
 
@@ -32,8 +31,7 @@ public class move : NetworkBehaviour {
     {
         this.scale = vec; // This is just to trigger the call to the OnSetScale while encapsulating.
     }
-
-    [Command]
+    
     private void OnSetScale(Vector3 vec)
     {
         this.scale = vec;
@@ -41,12 +39,12 @@ public class move : NetworkBehaviour {
     }
 
     void Start () {
-        
+        CmdSetScale(gameObject.transform.localScale);
         if (!isLocalPlayer)
         {
             return;
         }
-        CmdSetScale(gameObject.transform.localScale);
+        
         joystickcont = GameObject.FindWithTag("JoystickContainer");
         gameObject.transform.localScale = new Vector3(0.05f, 0.05f, 1);
         
@@ -63,13 +61,13 @@ public class move : NetworkBehaviour {
     }
     
     void Update () {
-        
+        CmdSetScale(gameObject.transform.localScale);
         if (!isLocalPlayer)
         {
             return;
         }
 
-        CmdSetScale(gameObject.transform.localScale);
+        
         Vector3 dir = Vector3.zero;
 
         dir.x = Input.GetAxis("Horizontal");

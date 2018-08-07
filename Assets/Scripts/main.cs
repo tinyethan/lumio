@@ -5,6 +5,7 @@ using UnityEngine.Networking;
 
 public class main : NetworkBehaviour {
 
+    public Canvas canvas;
     private GameObject[] levelones;
     public GameObject dustparticle;
     public GameObject nebula1;
@@ -13,6 +14,12 @@ public class main : NetworkBehaviour {
 
     // Use this for initialization
     void Start () {
+        //    if (!isLocalPlayer)
+        //    {
+        //        canvas.enabled = false;
+        //}
+        
+
         levelones = GameObject.FindGameObjectsWithTag("level1");
         foreach (GameObject a in levelones)
         {
